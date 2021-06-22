@@ -28,3 +28,16 @@ function operate(mathSymbol, numA, numB){
         return multiply(numA, numB);
     }
 }
+
+display = document.querySelector('.display');
+console.log(display);
+allNumButtons = document.querySelector('.numbers');
+for(let i=0;i<allNumButtons.children.length;i++){
+    console.log(allNumButtons.children[i].style.fontSize);
+    allNumButtons.children[i].addEventListener('click', displayNum(allNumButtons.children[i]));
+}
+function displayNum(num){
+    display.style.textContent = num.style.textContent;
+}
+
+console.log(display.style);
