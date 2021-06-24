@@ -6,6 +6,7 @@ h1{
     position:absolute;
     font-size: 40px;
     top: -25px;
+    color: black;
 }
 
 .flex-center{
@@ -36,6 +37,11 @@ h1{
     text-align: end;
     padding-right: 10px;
     padding-top: 10px;
+    padding-left: 10px;
+    background-color: #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:inherit;
 }
 
 .internal{
@@ -50,13 +56,13 @@ h1{
     padding-top: 15px;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
-    grid-template-columns: 1fr 1fr 1fr 2fr;
+    grid-template-columns: 1.5fr 1.5fr 1.5fr 2fr;
     grid-template-rows: 70px 70px 70px 70px 70px;
     grid-auto-flow: row;
 }
 .numbers button{
     border-radius: 5px;
-    font-size: 15px;
+    font-size: 1.7rem;
     text-decoration: none;
     background: rgb(255, 189, 127);
 }
