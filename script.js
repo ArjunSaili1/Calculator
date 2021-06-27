@@ -1,12 +1,13 @@
-let numA = null;
-let numB = null;
-let operater = null;
-let result = false;
+const display = document.querySelector('.display');
+const numButtons = document.querySelectorAll('.num');
+const allOperators = document.querySelectorAll('.operator');
+let allOperatorsArray = [];
+let operateArray = [];
+let resultCheck = false;
 function roundToMaxDigits(num){
     let decimalSplit = num.toString().split('.');
     let maxDecimalSpots = decimalSplit[0].length - 13;
     if(maxDecimalSpots > 0 && decimalSplit[1]>maxDecimalSpots){
-        console.log('hello')
         return num.toFixed(maxDecimalSpots).toString();
     }
     else{
@@ -27,94 +28,112 @@ function multiply(numA, numB) {
 }
 
 function divide(numA, numB){
-    return roundToMaxDigits(numA/numB)
+    return roundToMaxDigits(numA/numB);
 }
 
-function operate(mathSymbol, numA, numB){
-    if(mathSymbol && numA && numB){
-        if(mathSymbol == '+'){
-            return add(numA,numB);
+function percentage(numA){
+    return roundToMaxDigits(numA/100);
+}
+
+function updateDisplay(currentButton){
+    if(display.textContent.length <= 13){
+        if(currentButton.id == 'decimal'){
+            if(!(display.textContent)){
+                display.textContent += 0 + currentButton.textContent;              
+            }
+            if(display.textContent.indexOf('.')==-1){
+                display.textContent += currentButton.textContent;
+            }
         }
-        if(mathSymbol == '-'){
-            return subtract(numA, numB);
+        else if(currentButton.id == 'pos-neg'){
+            if(display.textContent[0] == '-'){
+                display.textContent = display.textContent.slice(1);
+            }
+            else{
+                display.textContent = '-' + display.textContent;
+            }
         }
-        if(mathSymbol == '/' || mathSymbol == '÷'){
-            return divide(numA, numB);
+        else if(currentButton.id === 'clearLast'){
+            display.textContent = display.textContent.slice(0,-1);
         }
-        if(mathSymbol == '*'){
-            return multiply(numA, numB);
+        else if(currentButton.id == 'clear'){
+            display.textContent = '';
+            operateArray = [];
         }
+        else{
+            if(resultCheck){
+                display.textContent = '';
+                resultCheck = false;
+            }
+            display.textContent += currentButton.textContent;
+        }
+    }
+    else{
+        alert('Maximum Amount of characters reached.')
     }
 }
 
-display = document.querySelector('.display');
-allNumButtons = document.querySelector('.numbers');
-for(let i=0;i<allNumButtons.children.length;i++){
-    let currentButton = allNumButtons.children[i];
-    currentButton.addEventListener('click', ()=>{
-        if(display.textContent.length < 13){
-            if(currentButton.classList.contains('shown')){
-                if(currentButton.id == 'decimal'){
-                    if(!(display.textContent)){
-                        display.textContent += 0;
-                        display.textContent += currentButton.textContent;                    
-                    }
-                    if(display.textContent.indexOf('.')==-1){
-                        display.textContent += currentButton.textContent;
-                    }
-                }
-                else{
-                    if(result){
-                        numA = Number(display.textContent);
-                        display.textContent = '';
-                        display.textContent += currentButton.textContent;
-                    }
-                    else{
-                        display.textContent += currentButton.textContent;
-                    }
-                }
-            }
-            if(currentButton.id == 'pos-neg'){
-                if(display.textContent[0] == '-'){
-                    display.textContent = display.textContent.slice(1);
-                }
-                else{
-                    display.textContent = '-' + display.textContent;
-                }
-            }
-        }
-        if(currentButton.id == 'clearLast'){
-            display.textContent = display.textContent.slice(0,-1);
-        }
-        if(currentButton.id == 'clear'){
-            display.textContent = '';
-            numA = null;
-            numB = null;
-        }
-
-        if(currentButton.classList.contains('operator')){
-            if(numA){
-                numB = Number(display.textContent);
-                document.getElementById('equals').click();
+function getOperation(operator){
+    console.log(resultCheck);
+    console.log(operator.textContent);
+    operateArray.push(display.textContent);
+    operateArray.push(operator.textContent);
+    display.textContent = '';
+    result = display.textContent;
+        if(operateArray.length >= 3 || operateArray[operateArray.length-1]=='%'){
+            let numA = Number(operateArray[0]);
+            let numOperator = operateArray[1];
+            let numB = Number(operateArray[2]);
+            let result = operate(numOperator, numA, numB);
+            if(operateArray[operateArray.length-1] == '%'){
+                console.log('OKK')
+                console.log(operateArray);
+                operateArray.splice(0,2);
             }
             else{
-                numA = Number(display.textContent);
-                display.textContent = '';
-                operater = currentButton.textContent;
+                operateArray.splice(0,3);
             }
+            operateArray.unshift(result);
+            display.textContent = '';
+            resultCheck = true;
+            display.textContent = operateArray[0];
         }
-        if(currentButton.id == 'equals'){
-            numB = Number(display.textContent);
-            if(operate(operater,numA,numB)){
-                display.textContent = operate(operater,numA,numB);
-                numA=null;
-                numB=null;
-                result = true;
-            }
-        }
-        if(currentButton.id == 'percent'){
-            display.textContent = (Number(display.textContent)/100).toString()
-        }
-    });
 }
 
+function operate(mathSymbol, numA, numB){
+    console.log(operateArray);
+    console.log(numA);
+    console.log(numB);    
+    if((operateArray[operateArray.length-1])=='%'){
+        if(numA){
+            return percentage(numA);
+        }
+        else{
+            return percentage(numB);
+        }
+    }
+    if(mathSymbol == '+'){
+        return add(numA,numB);
+    }
+    if(mathSymbol == '-'){
+        return subtract(numA, numB);
+    }
+    if(mathSymbol == '/' || mathSymbol == '÷'){
+        return divide(numA, numB);
+    }
+    if(mathSymbol == '*'){
+        return multiply(numA, numB);
+    }
+    if(mathSymbol == '='){
+        return numA;
+    }
+}
+
+for(let i = 0; i < numButtons.length; i++){
+    numButtons[i].addEventListener('click', updateDisplay.bind(null, numButtons[i]));
+}
+
+for(let i = 0; i < allOperators.length; i++){
+    allOperatorsArray.push(allOperators[i].textContent);
+    allOperators[i].addEventListener('click', getOperation.bind(null, allOperators[i]));
+}

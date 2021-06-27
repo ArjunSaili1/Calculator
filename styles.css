@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(150, 139, 247);
+    background-color: #cc8bf7;
     font-family: 'Poppins', sans-serif;
 }
 h1{
@@ -19,7 +19,7 @@ h1{
     position: absolute;
     top: 10%;
     display: flex;
-    background-color:linen;
+    background-color: #f7918b;
     border-style: solid;
     border-color: black;
     border-radius: 25px;
@@ -64,5 +64,14 @@ h1{
     border-radius: 5px;
     font-size: 1.7rem;
     text-decoration: none;
-    background: rgb(255, 189, 127);
+}
+.operator{
+    background: #8be1f7;
+}
+
+.center-nums{
+    background: #f7e18b;
+}
+.top{
+    background: #b6f78b;
 }
