@@ -74,8 +74,6 @@ function updateDisplay(currentButton){
 }
 
 function getOperation(operator){
-    console.log(resultCheck);
-    console.log(operator.textContent);
     operateArray.push(display.textContent);
     operateArray.push(operator.textContent);
     display.textContent = '';
@@ -86,8 +84,6 @@ function getOperation(operator){
             let numB = Number(operateArray[2]);
             let result = operate(numOperator, numA, numB);
             if(operateArray[operateArray.length-1] == '%'){
-                console.log('OKK')
-                console.log(operateArray);
                 operateArray.splice(0,2);
             }
             else{
@@ -100,10 +96,7 @@ function getOperation(operator){
         }
 }
 
-function operate(mathSymbol, numA, numB){
-    console.log(operateArray);
-    console.log(numA);
-    console.log(numB);    
+function operate(mathSymbol, numA, numB){ 
     if((operateArray[operateArray.length-1])=='%'){
         if(numA){
             return percentage(numA);
