@@ -76,34 +76,35 @@ function updateDisplay(currentButton){
 function getOperation(operator){
     operateArray.push(display.textContent);
     operateArray.push(operator.textContent);
+    if(operator.textContent == '%'){
+        operateArray.push(null);
+        operateArray.push(null);
+    }
     display.textContent = '';
     result = display.textContent;
-        if(operateArray.length >= 3 || operateArray[operateArray.length-1]=='%'){
+        if(operateArray.length >= 3){
             let numA = Number(operateArray[0]);
             let numOperator = operateArray[1];
             let numB = Number(operateArray[2]);
             let result = operate(numOperator, numA, numB);
-            if(operateArray[operateArray.length-1] == '%'){
-                operateArray.splice(0,2);
+            if(operator.textContent == '%'){
+                display.textContent = result;
+                operateArray = [];
+                resultCheck = true;
             }
             else{
                 operateArray.splice(0,3);
+                operateArray.unshift(result);
+                resultCheck = true;
+                display.textContent = operateArray[0];
             }
-            operateArray.unshift(result);
-            display.textContent = '';
-            resultCheck = true;
-            display.textContent = operateArray[0];
+
         }
 }
 
 function operate(mathSymbol, numA, numB){ 
-    if((operateArray[operateArray.length-1])=='%'){
-        if(numA){
-            return percentage(numA);
-        }
-        else{
-            return percentage(numB);
-        }
+    if(mathSymbol =='%'){
+        return percentage(numA);
     }
     if(mathSymbol == '+'){
         return add(numA,numB);
@@ -111,7 +112,11 @@ function operate(mathSymbol, numA, numB){
     if(mathSymbol == '-'){
         return subtract(numA, numB);
     }
-    if(mathSymbol == '/' || mathSymbol == '÷'){
+    if(mathSymbol == '/'){
+        if(numA && numB == 0){
+            alert("You can't divide by 0!");
+            return null;
+        }
         return divide(numA, numB);
     }
     if(mathSymbol == '*'){
